@@ -2,11 +2,15 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import org.easetech.easytest.annotation.DataLoader;
+import org.easetech.easytest.annotation.Param;
+import org.easetech.easytest.runner.DataDrivenTestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,6 +23,8 @@ import support.Screenshot;
 
 import java.util.concurrent.TimeUnit;
 
+@RunWith(DataDrivenTestRunner.class)
+@DataLoader(filePaths = "UserInformationTestData.csv")
 public class UserInformationTest {
 
     private WebDriver browser;
@@ -56,12 +62,13 @@ public class UserInformationTest {
 
         // Click on link text= "MORE DATA ABOUT YOU"
         browser.findElement(By.linkText("MORE DATA ABOUT YOU")).click();
-
     }
 
 
     @Test
-    public void testAddOneAdditionalUserInfo(){
+    public void testAddOneAdditionalUserInfo(@Param(name="type")String type,
+                                             @Param(name="contact")String contact,
+                                             @Param(name="message")String expectedMessage){
 
         // Click on XPath = //button[@data-target='addmoredata']
         browser.findElement(By.xpath("//button[@data-target='addmoredata']")).click();
@@ -71,10 +78,10 @@ public class UserInformationTest {
 
         // Select "Phone" on combobox name="type"
         WebElement typeField = popUpAddMoreData.findElement(By.name("type"));
-        new Select(typeField).selectByVisibleText("Phone");
+        new Select(typeField).selectByVisibleText(type);
 
         // Type "+5519987654321" on combobox name="contact"
-        popUpAddMoreData.findElement(By.name("contact")).sendKeys("+5519987654321");
+        popUpAddMoreData.findElement(By.name("contact")).sendKeys(contact);
 
         // Click on link text="SAVE" in the popup id="addmoredata"
         popUpAddMoreData.findElement(By.linkText("SAVE")).click();
@@ -82,7 +89,7 @@ public class UserInformationTest {
         // Validate text "Your contact has been added!" on toast message id="toast-container"
         WebElement popUpMessage = browser.findElement(By.id("toast-container"));
         String message = popUpMessage.getText();
-        assertEquals("Your contact has been added!", message);
+        assertEquals(expectedMessage, message);
     }
 
     @Test
@@ -112,7 +119,7 @@ public class UserInformationTest {
     @After
     public void TearDown(){
         // Close the browser
-        /browser.quit(); // close all tabs
+        browser.quit(); // close all tabs
         // browser.close(); // close only current tab
     }
 }
