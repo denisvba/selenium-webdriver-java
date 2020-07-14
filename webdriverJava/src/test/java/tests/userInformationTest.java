@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,19 +51,39 @@ public class userInformationTest {
         // Click on link with text="SIGN IN"
         browser.findElement(By.linkText("SIGN IN")).click();
 
-        // Validate element class="me" has text "Hi, Julio"
 
-        WebElement me = browser.findElement(By.className("me"));
-        String meElementText = me.getText();
+        // Click on link class="me"
+        browser.findElement(By.className("me")).click();
 
-        // Validation
-        assertEquals("Hi, Julio", meElementText);
+        // Click on link text= "MORE DATA ABOUT YOU"
+        browser.findElement(By.linkText("MORE DATA ABOUT YOU")).click();
+
+        // Click on XPath = //button[@data-target='addmoredata']
+        browser.findElement(By.xpath("//button[@data-target='addmoredata']")).click();
+
+        // ID the pop up with form id="addmoredata"
+        WebElement popUpAddMoreData = browser.findElement(By.id("addmoredata"));
+
+        // Select "Phone" on combobox name="type"
+        WebElement typeField = popUpAddMoreData.findElement(By.name("type"));
+        new Select(typeField).selectByVisibleText("Phone");
+
+        // Type "+5519987654321" on combobox name="contact"
+        popUpAddMoreData.findElement(By.name("contact")).sendKeys("+5519987654321");
+
+        // Click on link text="SAVE" in the popup id="addmoredata"
+        popUpAddMoreData.findElement(By.linkText("SAVE")).click();
+
+        // Validate text "Your contact has been added!" on toast message id="toast-container"
+        WebElement popUpMessage = browser.findElement(By.id("toast-container"));
+        String message = popUpMessage.getText();
+        assertEquals("Your contact has been added!", message);
     }
 
     @After
     public void TearDown(){
         // Close the browser
-        browser.quit(); // close all tabs
+        // browser.quit(); // close all tabs
         // browser.close(); // close only current tab
     }
 }
