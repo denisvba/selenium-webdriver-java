@@ -80,7 +80,7 @@ public class userInformationTest {
     }
 
     @Test
-    public void removeAnUserContact(){
+    public void testRemoveAnUserContact(){
         // Click on element with  xpath //span[text() ='+5519987654321']/following-sibling::a
         browser.findElement(By.xpath("//span[text() ='+5519987654321']/following-sibling::a")).click();
 
