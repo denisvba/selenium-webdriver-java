@@ -4,21 +4,27 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import support.Generator;
+import support.Screenshot;
 
 import java.util.concurrent.TimeUnit;
 
 public class UserInformationTest {
 
     private WebDriver browser;
+
+    @Rule
+    public TestName test = new TestName();
 
     @Before
     public void setUp(){
@@ -54,7 +60,7 @@ public class UserInformationTest {
     }
 
 
-    //@Test
+    @Test
     public void testAddOneAdditionalUserInfo(){
 
         // Click on XPath = //button[@data-target='addmoredata']
@@ -92,6 +98,9 @@ public class UserInformationTest {
         String message = popUpMessage.getText();
         assertEquals("Rest in peace, dear phone!", message);
 
+        String screenshotFilename = "./test-report/"+ Generator.dateTimeToFile() + test.getMethodName() + ".png";
+        Screenshot.take(browser, screenshotFilename);
+
         // Wait up to 10 seconds to the window to be dismissed
         WebDriverWait wait = new WebDriverWait(browser, 10);
         wait.until(ExpectedConditions.stalenessOf(popUpMessage));
@@ -103,7 +112,7 @@ public class UserInformationTest {
     @After
     public void TearDown(){
         // Close the browser
-        // browser.quit(); // close all tabs
+        /browser.quit(); // close all tabs
         // browser.close(); // close only current tab
     }
 }
