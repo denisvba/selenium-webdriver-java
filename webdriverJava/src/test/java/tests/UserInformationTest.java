@@ -20,6 +20,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import support.Generator;
 import support.Screenshot;
+import support.Web;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,13 +35,7 @@ public class UserInformationTest {
 
     @Before
     public void setUp(){
-        // Open Browser
-        //System.setProperty("webdriver.chrome.driver","~/drivers/chromedriver83/chromedriver");
-        browser = new ChromeDriver();
-        browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-        // Navigate to Takist page
-        browser.get("http://www.juliodelima.com.br/taskit");
+        browser = Web.createChrome();
 
         // Click on element with link text = "Sign in"
         browser.findElement(By.linkText("Sign in")).click();
